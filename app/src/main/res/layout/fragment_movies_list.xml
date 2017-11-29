@@ -5,9 +5,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="sa.thiqah.emanbasahel.popularmovies_1.views.MoviesListFragment">
 
-<android.support.v7.widget.GridLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:columnCount="2" />
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" />
 </FrameLayout>

@@ -10,22 +10,18 @@ import android.view.ViewGroup;
 import sa.thiqah.emanbasahel.popularmovies_1.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MoviesListFragment extends Fragment {
 
 
-    public MoviesListFragment() {
-        // Required empty public constructor
-    }
+   View RootView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movies_list, container, false);
+        RootView=inflater.inflate(R.layout.fragment_movies_list, container, false);
+        //ToDo show GridView of Movies
+        return RootView;
     }
 
 }
