@@ -24,15 +24,16 @@ public class SortDialog extends DialogFragment {
     RadioButton radioTop,radioPopular;
     boolean isTopRated=false, isPopular=false;
     Button buttOk, buttCancel;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.dialog_sort, container, false);
+    }
 
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_sort, null));
         final Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         radioPopular=dialog.findViewById(R.id.sort_popular);
@@ -77,7 +78,6 @@ public class SortDialog extends DialogFragment {
             }
         });
 
-        builder.create();
         return dialog;
     }
 }
