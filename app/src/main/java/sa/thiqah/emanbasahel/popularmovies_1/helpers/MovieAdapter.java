@@ -1,5 +1,6 @@
 package sa.thiqah.emanbasahel.popularmovies_1.helpers;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
 import sa.thiqah.emanbasahel.popularmovies_1.R;
+import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
 
 /**
  * Created by emanbasahel on 30/11/2017 AD.
@@ -16,10 +22,20 @@ import sa.thiqah.emanbasahel.popularmovies_1.R;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    ImageView imgMovie;
-    TextView txtMovieTitle;
+
+    private List<Result> movieList;
+    private Context mContext;
+    private String imgURL;
+
+    public MovieAdapter (Context _context, List<Result> mList)
+    {
+        mContext = _context;
+        movieList=mList;
+    }
     public class MovieViewHolder extends RecyclerView.ViewHolder
     {
+        ImageView imgMovie;
+        TextView txtMovieTitle;
         public MovieViewHolder (View view)
         {
             super(view);
@@ -38,12 +54,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
+        holder.txtMovieTitle.setText(movieList.get(position).getTitle());
+        imgURL = "http://image.tmdb.org/t/p/w185//"+ movieList.get(position).getPosterPath();
+        Picasso.with(mContext).load(imgURL).into(holder.imgMovie);
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return movieList.size();
     }
 
 

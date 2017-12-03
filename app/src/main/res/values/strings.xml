@@ -6,4 +6,11 @@
     <string name="placeholder_movie_title">Movie Title</string>
     <string name="popular_movie">popularMovie</string>
     <string name="toprated_movie">topRatedMovie</string>
+    <string name="sortValue">sortValue</string>
+    <string name="noData">Sorry, There is no data, App is closing</string>
+    <string name="sort_title">What type of sorting do you prefer?</string>
+    <string name="sort_topRated">Top Rated Movies</string>
+    <string name="sort_Popular">Popular Movies</string>
+    <string name="action_ok">Ok</string>
+    <string name="action_cancel">Cancel</string>
 </resources>

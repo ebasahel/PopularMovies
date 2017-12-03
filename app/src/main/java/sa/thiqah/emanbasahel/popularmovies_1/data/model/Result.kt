@@ -26,7 +26,7 @@ class Result : Parcelable {
     var video: Boolean? = null
     @SerializedName("vote_average")
     @Expose
-    var voteAverage: Int? = null
+    var voteAverage: Double? = null
     @SerializedName("title")
     @Expose
     var title: String? = null
