@@ -6,7 +6,9 @@ package sa.thiqah.emanbasahel.popularmovies_1.data.webservice;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
+import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieDetailsModel;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieModel;
 
 
@@ -17,6 +19,6 @@ public interface ApiInterface {
     @GET("top_rated")
     Call<MovieModel> getTopRatedMovies(@Query("api_key") String apiKey);
 
-//    @GET("movie/{id}")
-//    Call<MovieModel> getMovieDetails(@Path("id") int id, @Query("api_key") String apiKey);
+    @GET("movie/{id}")
+    Call<MovieDetailsModel> getMovieDetails(@Path("id") int id, @Query("api_key") String apiKey);
 }

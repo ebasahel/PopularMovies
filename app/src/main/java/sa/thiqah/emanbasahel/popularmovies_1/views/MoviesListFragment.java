@@ -49,6 +49,7 @@ public class MoviesListFragment extends Fragment {
                 createRecyclerList(recyclerView,movieList);
             } else {
                 movieList = getArguments().getParcelableArrayList(getString(R.string.toprated_movie));
+                createRecyclerList(recyclerView,movieList);
             }
         }
         //endregion

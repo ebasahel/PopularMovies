@@ -2,8 +2,10 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="sa.thiqah.emanbasahel.popularmovies_1.views.MovieDetails">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,17 +21,6 @@
             app:titleTextColor="@color/colorAccent"
             app:layout_scrollFlags="scroll|enterAlways">
 
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/action_sort"
-                android:src="@drawable/action_sort"
-                android:background="@android:color/transparent"
-                android:layout_gravity="end|center"
-                android:paddingEnd="16dp"
-                android:paddingStart="16dp"
-                />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
@@ -39,13 +30,10 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
-            android:id="@+id/container"
+        <include
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            layout="@layout/content_details"/>
 
     </android.support.v4.widget.NestedScrollView>
-
-
-
 </android.support.design.widget.CoordinatorLayout>

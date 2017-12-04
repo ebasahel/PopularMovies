@@ -23,12 +23,13 @@ import sa.thiqah.emanbasahel.popularmovies_1.data.webservice.ApiClient;
 import sa.thiqah.emanbasahel.popularmovies_1.data.webservice.ApiInterface;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.SortDialog;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SortDialog.onSortSelected {
 
     private ImageButton actionSort;
     private List<Result> movieList;
     private SortDialog sortDialog;
     boolean mIsLargeLayout;
+    MoviesListFragment moviesListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,37 +37,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         actionSort = findViewById(R.id.action_sort);
         movieList = new ArrayList<>();
-        sortDialog = new SortDialog();
+        sortDialog = new SortDialog(this);
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
-
+        moviesListFragment = new MoviesListFragment();
         actionSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog();
+                sortDialog.createDialog().show();
             }
         });
 
         getPopularMovies();
     }
 
-    public void showDialog() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-
-        if (mIsLargeLayout) {
-            // The device is using a large layout, so show the fragment as a dialog
-            sortDialog.show(fragmentManager, "dialog");
-        } else {
-            // The device is smaller, so show the fragment fullscreen
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            // For a little polish, specify a transition animation
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            // To make it fullscreen, use the 'content' root view as the container
-            // for the fragment, which is always the root view for the activity
-            transaction.add(android.R.id.content, sortDialog)
-                    .addToBackStack(null).commit();
-        }
-    }
 
     public void getPopularMovies() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -109,14 +92,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addFragment(List<Result> list, String sortValue) {
-        MoviesListFragment moviesListFragment = new MoviesListFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(sortValue, (ArrayList<? extends Parcelable>) list);
         bundle.putString(getString(R.string.sortValue), sortValue);
         moviesListFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, moviesListFragment);
+        fragmentTransaction.replace(R.id.container, moviesListFragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onSortTypeSelected(String sortType) {
+        //ToDo fix here
+        if (sortType.equals(getString(R.string.toprated_movie)))
+            getTopRatedMovies();
+        else
+            getPopularMovies();
     }
 }

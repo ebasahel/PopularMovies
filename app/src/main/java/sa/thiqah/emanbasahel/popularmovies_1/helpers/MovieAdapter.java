@@ -1,6 +1,7 @@
 package sa.thiqah.emanbasahel.popularmovies_1.helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import sa.thiqah.emanbasahel.popularmovies_1.R;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
+import sa.thiqah.emanbasahel.popularmovies_1.views.MovieDetails;
 
 /**
  * Created by emanbasahel on 30/11/2017 AD.
@@ -26,6 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private List<Result> movieList;
     private Context mContext;
     private String imgURL;
+    private int movieId;
 
     public MovieAdapter (Context _context, List<Result> mList)
     {
@@ -54,9 +57,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
+        movieId= movieList.get(position).getId();
         holder.txtMovieTitle.setText(movieList.get(position).getTitle());
         imgURL = "http://image.tmdb.org/t/p/w185//"+ movieList.get(position).getPosterPath();
         Picasso.with(mContext).load(imgURL).into(holder.imgMovie);
+        holder.imgMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext,MovieDetails.class);
+                intent.putExtra(mContext.getString(R.string.movieId),movieId);
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 
