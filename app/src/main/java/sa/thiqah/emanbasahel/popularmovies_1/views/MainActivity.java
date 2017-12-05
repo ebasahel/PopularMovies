@@ -2,6 +2,7 @@ package sa.thiqah.emanbasahel.popularmovies_1.views;
 
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,8 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     private List<Result> movieList;
     private SortDialog sortDialog;
     boolean mIsLargeLayout;
-    MoviesListFragment moviesListFragment;
+    MovieListFragment popularListFragment;
+    MovieListFragment topRatedListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         movieList = new ArrayList<>();
         sortDialog = new SortDialog(this);
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
-        moviesListFragment = new MoviesListFragment();
+        popularListFragment=new MovieListFragment();
+        topRatedListFragment = new MovieListFragment();
         actionSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
             @Override
             public void onResponse(@NonNull Call<MovieModel> call, @NonNull Response<MovieModel> response) {
                 movieList = response.body().getResults();
-                addFragment(movieList, getResources().getString(R.string.popular_movie));
+                addFragment(popularListFragment,movieList, getResources().getString(R.string.popular_movie));
 
             }
 
@@ -79,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
             public void onResponse(@NonNull Call<MovieModel> call, @NonNull Response<MovieModel> response) {
 
                 movieList = response.body().getResults();
-                addFragment(movieList, getResources().getString(R.string.toprated_movie));
+                addFragment(topRatedListFragment,movieList, getResources().getString(R.string.popular_movie));
+
             }
 
             @Override
@@ -91,20 +95,21 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
 
     }
 
-    public void addFragment(List<Result> list, String sortValue) {
+
+    public void addFragment(Fragment frag, List<Result> list, String sortValue) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(sortValue, (ArrayList<? extends Parcelable>) list);
         bundle.putString(getString(R.string.sortValue), sortValue);
-        moviesListFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.container, moviesListFragment);
+        frag.setArguments(bundle);
+        fragmentTransaction.replace(R.id.container, frag);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
     public void onSortTypeSelected(String sortType) {
-        //ToDo fix here
         if (sortType.equals(getString(R.string.toprated_movie)))
             getTopRatedMovies();
         else

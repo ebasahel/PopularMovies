@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.MovieAdapter;
 
 
-public class MoviesListFragment extends Fragment {
+public class MovieListFragment extends Fragment {
 
 
     private View RootView;
@@ -33,7 +32,7 @@ public class MoviesListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //region init
-        RootView = inflater.inflate(R.layout.fragment_movies_list, container, false);
+        RootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
         recyclerView = RootView.findViewById(R.id.recycler_view);
         //region init RecyclerView
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
