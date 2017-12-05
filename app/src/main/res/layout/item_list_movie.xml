@@ -25,8 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/img_movie"
             android:gravity="center"
-            android:paddingBottom="10dp"
-            android:text="@string/placeholder_movie_title" />
+            android:paddingBottom="10dp" />
 
     </RelativeLayout>
 

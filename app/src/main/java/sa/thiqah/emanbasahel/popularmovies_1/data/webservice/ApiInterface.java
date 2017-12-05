@@ -19,6 +19,6 @@ public interface ApiInterface {
     @GET("top_rated")
     Call<MovieModel> getTopRatedMovies(@Query("api_key") String apiKey);
 
-    @GET("movie/{id}")
+    @GET("{id}")
     Call<MovieDetailsModel> getMovieDetails(@Path("id") int id, @Query("api_key") String apiKey);
 }

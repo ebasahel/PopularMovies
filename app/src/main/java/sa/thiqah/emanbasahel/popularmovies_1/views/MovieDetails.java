@@ -28,7 +28,7 @@ public class MovieDetails extends AppCompatActivity {
     private int movieId;
     private String imgURL;
     ImageView imgMovie;
-    TextView txtTitle,txtDate,txtRating,txtDesc;
+    TextView txtTitle,txtDate,txtRating,txtplot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,7 +40,7 @@ public class MovieDetails extends AppCompatActivity {
         txtTitle = findViewById(R.id.txt_movie_title);
         txtDate =findViewById(R.id.txt_date);
         txtRating = findViewById(R.id.txt_rating);
-        txtDesc=findViewById(R.id.txt_desc);
+        txtplot=findViewById(R.id.txt_plot);
         getMovieDetails();
     }
     public void getMovieDetails() {
@@ -49,14 +49,12 @@ public class MovieDetails extends AppCompatActivity {
         call.enqueue(new Callback<MovieDetailsModel>() {
             @Override
             public void onResponse(@NonNull Call<MovieDetailsModel> call, @NonNull Response<MovieDetailsModel> response) {
-                //ToDo fix here
-                response.body();
-//                imgURL = "http://image.tmdb.org/t/p/w185//"+ response.body().getPosterPath();
-//                Picasso.with(MovieDetails.this).load(imgURL).into(imgMovie);
-//                txtTitle.setText(response.body().getTitle());
-//                txtDate.setText(response.body().getReleaseDate());
-//                txtRating.setText(String.valueOf(response.body().getVoteAverage()));
-//                txtDesc.setText(response.body().getOverview());
+                imgURL = "http://image.tmdb.org/t/p/w185//"+ response.body().getPosterPath();
+                Picasso.with(MovieDetails.this).load(imgURL).into(imgMovie);
+                txtTitle.setText(String.format(getString(R.string.movie_title),response.body().getTitle()));
+                txtDate.setText(String.format(getString(R.string.release_date),response.body().getReleaseDate()));
+                txtRating.setText(String.format(getString(R.string.rating),response.body().getVoteAverage()));
+                txtplot.setText(String.format(getString(R.string.plot),response.body().getOverview()));
 
             }
 
