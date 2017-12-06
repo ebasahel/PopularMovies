@@ -25,45 +25,47 @@ import sa.thiqah.emanbasahel.popularmovies_1.views.MovieDetails;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
 
+    //region variables
     private List<Result> movieList;
     private Context mContext;
     private String imgURL;
     private int movieId;
-
+    //endregion
     public MovieAdapter (Context _context, List<Result> mList)
     {
         mContext = _context;
         movieList=mList;
     }
-    public class MovieViewHolder extends RecyclerView.ViewHolder
+    //region ViewHolder Class
+    class MovieViewHolder extends RecyclerView.ViewHolder
     {
         ImageView imgMovie;
         TextView txtMovieTitle;
-        public MovieViewHolder (View view)
+         MovieViewHolder (View view)
         {
             super(view);
             imgMovie= view.findViewById(R.id.img_movie);
             txtMovieTitle= view.findViewById(R.id.txt_movie_title);
         }
     }
+    //endregion
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View movieViewHolder= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_movie,parent,false);
-        MovieViewHolder viewHolder = new MovieViewHolder(movieViewHolder);
-        return viewHolder ;
+        return new MovieViewHolder(movieViewHolder);
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, final int position) {
+    public void onBindViewHolder(final MovieViewHolder holder, int position) {
         holder.txtMovieTitle.setText(movieList.get(position).getTitle());
         imgURL = "http://image.tmdb.org/t/p/w185//"+ movieList.get(position).getPosterPath();
         Picasso.with(mContext).load(imgURL).into(holder.imgMovie);
         holder.imgMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                movieId= movieList.get(position).getId();
+                movieId= movieList.get(holder.getAdapterPosition()).getId();
                 Intent intent = new Intent(mContext,MovieDetails.class);
                 intent.putExtra(mContext.getString(R.string.movieId),movieId);
                 mContext.startActivity(intent);

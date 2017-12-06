@@ -25,15 +25,19 @@ import sa.thiqah.emanbasahel.popularmovies_1.data.webservice.ApiInterface;
 
 public class MovieDetails extends AppCompatActivity {
 
+    //region variables
     private int movieId;
     private String imgURL;
     ImageView imgMovie;
     TextView txtTitle,txtDate,txtRating,txtplot;
+    //endregion
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        //region init
         Intent intent = getIntent();
         movieId= intent.getIntExtra(getString(R.string.movieId),0);
         imgMovie = findViewById(R.id.img_movie);
@@ -41,8 +45,11 @@ public class MovieDetails extends AppCompatActivity {
         txtDate =findViewById(R.id.txt_date);
         txtRating = findViewById(R.id.txt_rating);
         txtplot=findViewById(R.id.txt_plot);
+        //endregion
         getMovieDetails();
     }
+
+    //region call getMovie Details API
     public void getMovieDetails() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<MovieDetailsModel> call = apiService.getMovieDetails(movieId,getResources().getString(R.string.api_key));
@@ -66,4 +73,5 @@ public class MovieDetails extends AppCompatActivity {
         });
 
     }
+    //endregion
 }

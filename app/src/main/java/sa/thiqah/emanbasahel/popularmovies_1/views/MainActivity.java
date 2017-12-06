@@ -26,18 +26,20 @@ import sa.thiqah.emanbasahel.popularmovies_1.helpers.SortDialog;
 
 public class MainActivity extends AppCompatActivity implements SortDialog.onSortSelected {
 
-    private ImageButton actionSort;
+    //region variables
     private List<Result> movieList;
     private SortDialog sortDialog;
     boolean mIsLargeLayout;
     MovieListFragment popularListFragment;
     MovieListFragment topRatedListFragment;
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        actionSort = findViewById(R.id.action_sort);
+        //region init
+        ImageButton actionSort = findViewById(R.id.action_sort);
         movieList = new ArrayList<>();
         sortDialog = new SortDialog(this);
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
@@ -49,11 +51,12 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
                 sortDialog.createDialog().show();
             }
         });
-
+        //endregion
         getPopularMovies();
     }
 
 
+    //region calling getPopularMovies api
     public void getPopularMovies() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<MovieModel> call = apiService.getPopularMovie(getResources().getString(R.string.api_key));
@@ -73,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         });
 
     }
+    //endregion
 
+    //region calling getTopRatedMovies api
     public void getTopRatedMovies() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<MovieModel> call = apiService.getTopRatedMovies(getResources().getString(R.string.api_key));
@@ -94,8 +99,9 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         });
 
     }
+    //endregion
 
-
+    //region add fragment whether it's popular or toprated
     public void addFragment(Fragment frag, List<Result> list, String sortValue) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -107,7 +113,9 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+    //endregion
 
+    //region sort type action listener
     @Override
     public void onSortTypeSelected(String sortType) {
         if (sortType.equals(getString(R.string.toprated_movie)))
@@ -115,4 +123,5 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         else
             getPopularMovies();
     }
+    //endregion
 }
