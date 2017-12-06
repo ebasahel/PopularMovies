@@ -19,7 +19,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/placeholder_movie"
-                android:id="@+id/img_movie" />
+                android:id="@+id/img_movie"
+                android:contentDescription="@string/img_movie_desc" />
 
             <TextView
                 android:layout_width="wrap_content"

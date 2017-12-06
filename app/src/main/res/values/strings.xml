@@ -1,14 +1,13 @@
 <resources>
     <string name="app_name">PopularMovies_1</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="toprated_movie">topRatedMovie</string>
     <string name="sortValue">sortValue</string>
     <string name="noData">Sorry, There is no data, App is closing</string>
     <string name="sort_title">What type of sorting do you prefer?</string>
     <string name="sort_topRated">Top Rated Movies</string>
     <string name="sort_Popular">Popular Movies</string>
-    <string name="action_ok">Ok</string>
+    <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
     <string name="movieId">movieId</string>
     <string name="popular_movie">popularMovie</string>
@@ -16,4 +15,6 @@
     <string name="rating">Vote Average: %1$f</string>
     <string name="release_date"> release date: %1$s</string>
     <string name="plot"> Plot: %1$s</string>
+    <string name="sortDesc">Sort Movie List</string>
+    <string name="img_movie_desc">Poster Movie</string>
 </resources>

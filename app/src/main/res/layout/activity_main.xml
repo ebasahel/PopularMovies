@@ -29,7 +29,7 @@
                 android:layout_gravity="end|center"
                 android:paddingEnd="16dp"
                 android:paddingStart="16dp"
-                />
+                android:contentDescription="@string/sortDesc" />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
