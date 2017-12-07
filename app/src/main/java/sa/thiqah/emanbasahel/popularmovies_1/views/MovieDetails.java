@@ -10,16 +10,11 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import sa.thiqah.emanbasahel.popularmovies_1.R;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieDetailsModel;
-import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieModel;
-import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
 import sa.thiqah.emanbasahel.popularmovies_1.data.webservice.ApiClient;
 import sa.thiqah.emanbasahel.popularmovies_1.data.webservice.ApiInterface;
 
