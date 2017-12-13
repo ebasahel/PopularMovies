@@ -17,4 +17,5 @@
     <string name="plot"> Plot: %1$s</string>
     <string name="sortDesc">Sort Movie List</string>
     <string name="img_movie_desc">Poster Movie</string>
+    <string name="movie_adapter">movie adapter</string>
 </resources>

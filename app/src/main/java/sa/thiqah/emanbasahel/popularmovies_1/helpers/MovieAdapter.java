@@ -2,6 +2,7 @@ package sa.thiqah.emanbasahel.popularmovies_1.helpers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sa.thiqah.emanbasahel.popularmovies_1.R;
@@ -24,17 +26,22 @@ import sa.thiqah.emanbasahel.popularmovies_1.views.MovieDetails;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
+    public interface OnItemClickListener {
+
+        void onItemClick(Result itemResult);
+
+    }
+
 
     //region variables
     private List<Result> movieList;
-    private Context mContext;
-    private String imgURL;
-    private int movieId;
+    private final OnItemClickListener listener;
+
     //endregion
-    public MovieAdapter (Context _context, List<Result> mList)
+    public MovieAdapter ( List<Result> mList,OnItemClickListener mListener)
     {
-        mContext = _context;
         movieList=mList;
+        listener=mListener;
     }
     //region ViewHolder Class
     class MovieViewHolder extends RecyclerView.ViewHolder
@@ -46,6 +53,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(view);
             imgMovie= view.findViewById(R.id.img_movie);
             txtMovieTitle= view.findViewById(R.id.txt_movie_title);
+        }
+
+        public void bind(final Result itemResult, final OnItemClickListener listener) {
+
+            txtMovieTitle.setText(itemResult.getTitle());
+            String imgURL = "http://image.tmdb.org/t/p/w185//" + itemResult.getPosterPath();
+            Picasso.with(itemView.getContext()).load(imgURL).into(imgMovie);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(itemResult);
+                }
+            });
         }
     }
     //endregion
@@ -59,18 +78,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(final MovieViewHolder holder, int position) {
-        holder.txtMovieTitle.setText(movieList.get(position).getTitle());
-        imgURL = "http://image.tmdb.org/t/p/w185//"+ movieList.get(position).getPosterPath();
-        Picasso.with(mContext).load(imgURL).into(holder.imgMovie);
-        holder.imgMovie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                movieId= movieList.get(holder.getAdapterPosition()).getId();
-                Intent intent = new Intent(mContext,MovieDetails.class);
-                intent.putExtra(mContext.getString(R.string.movieId),movieId);
-                mContext.startActivity(intent);
-            }
-        });
+        holder.bind(movieList.get(position),listener);
 
     }
 

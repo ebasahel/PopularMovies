@@ -1,6 +1,7 @@
 package sa.thiqah.emanbasahel.popularmovies_1.views;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -56,7 +57,14 @@ public class MovieListFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         //endregion
-        movieAdapter= new MovieAdapter(getActivity(),mList);
+        movieAdapter= new MovieAdapter(mList, new MovieAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Result itemResult) {
+                Intent intent = new Intent(getActivity(),MovieDetails.class);
+                intent.putExtra(getString(R.string.movieId),itemResult.getId());
+                getActivity().startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(movieAdapter);
     }
     //endregion

@@ -16,6 +16,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import sa.thiqah.emanbasahel.popularmovies_1.BuildConfig;
 import sa.thiqah.emanbasahel.popularmovies_1.R;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieModel;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     boolean mIsLargeLayout;
     MovieListFragment popularListFragment;
     MovieListFragment topRatedListFragment;
+    private static final String API_KEY = BuildConfig.api_key;
     //endregion
 
     @Override
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     //region calling getPopularMovies api
     public void getPopularMovies() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<MovieModel> call = apiService.getPopularMovie(getResources().getString(R.string.api_key));
+        Call<MovieModel> call = apiService.getPopularMovie(API_KEY);
         call.enqueue(new Callback<MovieModel>() {
             @Override
             public void onResponse(@NonNull Call<MovieModel> call, @NonNull Response<MovieModel> response) {
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     //region calling getTopRatedMovies api
     public void getTopRatedMovies() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<MovieModel> call = apiService.getTopRatedMovies(getResources().getString(R.string.api_key));
+        Call<MovieModel> call = apiService.getTopRatedMovies(API_KEY);
         call.enqueue(new Callback<MovieModel>() {
             @Override
             public void onResponse(@NonNull Call<MovieModel> call, @NonNull Response<MovieModel> response) {
