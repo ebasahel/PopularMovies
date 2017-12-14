@@ -125,4 +125,13 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
             getPopularMovies();
     }
     //endregion
+
+    //region onBackPressed
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finish();
+    }
+    //endregion
 }
