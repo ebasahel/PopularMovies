@@ -20,6 +20,7 @@
             app:logo="@drawable/ic_launcher"
             app:title="@string/app_name"
             app:titleTextColor="@color/colorAccent"
+            app:navigationIcon="@drawable/ic_back"
             app:layout_scrollFlags="scroll|enterAlways">
 
         </android.support.v7.widget.Toolbar>
