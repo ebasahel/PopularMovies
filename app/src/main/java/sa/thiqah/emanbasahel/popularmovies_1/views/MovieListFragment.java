@@ -3,7 +3,9 @@ package sa.thiqah.emanbasahel.popularmovies_1.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,6 +28,8 @@ public class MovieListFragment extends Fragment {
     private List<Result> movieList;
     private String sortValue="";
     private MovieAdapter movieAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private int savedPosition;
     //endregion
 
     @Override
@@ -45,6 +49,11 @@ public class MovieListFragment extends Fragment {
                 createRecyclerList(movieList);
             }
         }
+
+//        if(savedInstanceState!=null)
+//        {
+//            recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_pos)));
+//        }
         //endregion
         return RootView;
     }
@@ -53,7 +62,7 @@ public class MovieListFragment extends Fragment {
     private void createRecyclerList(List<Result> mList)
     {
         //region init RecyclerView
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         //endregion
@@ -68,4 +77,22 @@ public class MovieListFragment extends Fragment {
         recyclerView.setAdapter(movieAdapter);
     }
     //endregion
+
+
+    @Override
+    public void onSaveInstanceState(@Nullable Bundle bundle)
+    {
+        super.onSaveInstanceState(bundle);
+        bundle.putParcelable(getString(R.string.recyclerview_pos),recyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null)
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_pos)));
+
+    }
+
+
 }

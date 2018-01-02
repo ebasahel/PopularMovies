@@ -1,8 +1,11 @@
 package sa.thiqah.emanbasahel.popularmovies_1.views;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -55,6 +59,23 @@ public class MovieDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                NavUtils.navigateUpTo(MovieDetails.this,new Intent(MovieDetails.this,MainActivity.class));
+            }
+        });
+
+        txtRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //region add reviews fragment
+                ReviewsFragment reviewsFragment = new ReviewsFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putInt(getString(R.string.movieId),movieId);
+                reviewsFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.container, reviewsFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                //endregion
             }
         });
         //endregion

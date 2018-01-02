@@ -55,7 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             txtMovieTitle= view.findViewById(R.id.txt_movie_title);
         }
 
-        public void bind(final Result itemResult, final OnItemClickListener listener) {
+         void bind(final Result itemResult, final OnItemClickListener listener) {
 
             txtMovieTitle.setText(itemResult.getTitle());
             String imgURL = "http://image.tmdb.org/t/p/w185//" + itemResult.getPosterPath();
