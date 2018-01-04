@@ -11,6 +11,7 @@ import retrofit2.http.Query;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieDetailsModel;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieModel;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieReviews;
+import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieTrailers;
 
 
 public interface ApiInterface {
@@ -27,5 +28,5 @@ public interface ApiInterface {
     Call<MovieReviews> getMovieReviews(@Path("id") int id, @Query("api_key") String apiKey);
 
     @GET("{id}/videos")
-    Call<MovieDetailsModel> getMovieTrailers(@Path("id") int id, @Query("api_key") String apiKey);
+    Call<MovieTrailers> getMovieTrailers(@Path("id") int id, @Query("api_key") String apiKey);
 }

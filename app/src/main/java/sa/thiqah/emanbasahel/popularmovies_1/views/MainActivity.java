@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     boolean mIsLargeLayout;
     MovieListFragment popularListFragment;
     MovieListFragment topRatedListFragment;
+    MovieListFragment favoriteMoviesFragment;
     private static final String API_KEY = BuildConfig.api_key;
     //endregion
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
         popularListFragment=new MovieListFragment();
         topRatedListFragment = new MovieListFragment();
+        favoriteMoviesFragment= new MovieListFragment();
         actionSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,8 +123,11 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     public void onSortTypeSelected(String sortType) {
         if (sortType.equals(getString(R.string.toprated_movie)))
             getTopRatedMovies();
-        else
+        else if(sortType.equals(getString(R.string.popular_movie)))
             getPopularMovies();
+        else if(sortType.equals(getString(R.string.favorite_movie)))
+            addFragment(favoriteMoviesFragment,movieList,getString(R.string.favorite_movie));
+//            //ToDo list of favorites movies
     }
     //endregion
 

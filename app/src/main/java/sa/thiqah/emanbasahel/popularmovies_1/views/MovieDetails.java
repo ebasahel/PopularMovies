@@ -1,20 +1,24 @@
 package sa.thiqah.emanbasahel.popularmovies_1.views;
 
+import android.content.ContentValues;
 import android.content.Intent;
-import android.os.Parcelable;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,9 +30,13 @@ import retrofit2.Response;
 import sa.thiqah.emanbasahel.popularmovies_1.BuildConfig;
 import sa.thiqah.emanbasahel.popularmovies_1.R;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieDetailsModel;
-import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
+import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieTrailers;
+import sa.thiqah.emanbasahel.popularmovies_1.data.model.TrailersResult;
+import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesContract;
+import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesDatabase;
 import sa.thiqah.emanbasahel.popularmovies_1.data.webservice.ApiClient;
 import sa.thiqah.emanbasahel.popularmovies_1.data.webservice.ApiInterface;
+import sa.thiqah.emanbasahel.popularmovies_1.helpers.TrailersAdapter;
 
 public class MovieDetails extends AppCompatActivity {
 
@@ -36,8 +44,16 @@ public class MovieDetails extends AppCompatActivity {
     private int movieId;
     private ImageView imgMovie;
     private TextView txtTitle,txtDate,txtRating,txtplot;
+    private FloatingActionButton btnFav;
+    private String movieKey;
+    List<TrailersResult> trailersResultList;
+    private RecyclerView trailersRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
     private static final String API_KEY = BuildConfig.api_key;
     private Toolbar toolbar;
+    private String movieTitle;
+    private SQLiteDatabase mDb;
+//    private String YOUTUBE_BASE_URL="https://www.youtube.com/watch?v=";
     //endregion
 
     @Override
@@ -49,11 +65,16 @@ public class MovieDetails extends AppCompatActivity {
         //region init
         Intent intent = getIntent();
         movieId= intent.getIntExtra(getString(R.string.movieId),0);
+        FavoritesDatabase dbHelper = new FavoritesDatabase(this);
+        mDb = dbHelper.getWritableDatabase();
+        trailersResultList= new ArrayList<>();
         imgMovie = findViewById(R.id.img_movie);
         txtTitle = findViewById(R.id.txt_movie_title);
         txtDate =findViewById(R.id.txt_date);
         txtRating = findViewById(R.id.txt_rating);
         txtplot=findViewById(R.id.txt_plot);
+        trailersRecyclerView=findViewById(R.id.trailers_recyclerview);
+        btnFav=findViewById(R.id.btn_fav);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,10 +83,11 @@ public class MovieDetails extends AppCompatActivity {
             }
         });
 
+        //region add reviews fragment click listener
         txtRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //region add reviews fragment
+
                 ReviewsFragment reviewsFragment = new ReviewsFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -75,13 +97,80 @@ public class MovieDetails extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.container, reviewsFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-                //endregion
+
             }
         });
         //endregion
+
+        //region adding movie to Favorite
+        btnFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addToFavorite();
+            }
+        });
+        //endregion
+
+        //endregion
         getMovieDetails();
+        getVideos();
     }
 
+    //region add movies to favorite
+    private void addToFavorite()
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_TITLE,movieTitle);
+        cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_ID,movieId);
+        mDb.insert(FavoritesContract.FavoriteMovies.TABLE_NAME,null,cv);
+    }
+    //endregion
+
+    private void openTrailer(String videoKey)
+    {
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoKey));
+        startActivity(appIntent);
+    }
+
+    //region call getVideos
+    private void getVideos()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<MovieTrailers> call = apiService.getMovieTrailers(movieId,API_KEY);
+        call.enqueue(new Callback<MovieTrailers>() {
+            @Override
+            public void onResponse(@NonNull Call<MovieTrailers> call, @NonNull Response<MovieTrailers> response) {
+
+                trailersResultList=response.body().getResults();
+                createRecyclerView(trailersResultList);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MovieTrailers> call, @NonNull Throwable t) {
+                Toast.makeText(MovieDetails.this, getString(R.string.noData), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+    }
+    //endregion
+
+    //region init RecyclerView
+    private void createRecyclerView(List<TrailersResult> trailersList)
+    {
+        mLayoutManager = new LinearLayoutManager(this);
+        trailersRecyclerView.setLayoutManager(mLayoutManager);
+        trailersRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        TrailersAdapter trailersAdapter= new TrailersAdapter(trailersList, new TrailersAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(TrailersResult itemResult) {
+                openTrailer(itemResult.getKey());
+            }
+
+        });
+        trailersRecyclerView.setAdapter(trailersAdapter);
+
+    }
+    //endregion
     //region call getMovie Details API
     public void getMovieDetails() {
 
@@ -92,7 +181,8 @@ public class MovieDetails extends AppCompatActivity {
             public void onResponse(@NonNull Call<MovieDetailsModel> call, @NonNull Response<MovieDetailsModel> response) {
                 String imgURL = "http://image.tmdb.org/t/p/w185//"+ response.body().getPosterPath();
                 Picasso.with(MovieDetails.this).load(imgURL).into(imgMovie);
-                txtTitle.setText(String.format(getString(R.string.movie_title),response.body().getTitle()));
+                movieTitle=response.body().getTitle();
+                txtTitle.setText(String.format(getString(R.string.movie_title),movieTitle));
                 txtDate.setText(String.format(getString(R.string.release_date),response.body().getReleaseDate()));
                 txtRating.setText(String.format(getString(R.string.rating),response.body().getVoteAverage()));
                 txtplot.setText(String.format(getString(R.string.plot),response.body().getOverview()));

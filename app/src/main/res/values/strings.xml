@@ -20,9 +20,12 @@
     <string name="movie_adapter">movie adapter</string>
     <string name="recyclerview_pos">recyclerviewPosition</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="author_name">Author Name:</string>
     <string name="review">The Review:</string>
     <string name="no_reviews">Sorry, There are no reviews to be shown</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="movie_pref">moviePreferences</string>
+    <string name="favorite_movie">favoriteMovie</string>
+    <string name="sort_Favorites">My Favorite Movies</string>
+    <string name="movie_trailer">Movie Trailer:</string>
 </resources>

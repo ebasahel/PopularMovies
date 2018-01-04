@@ -2,6 +2,8 @@ package sa.thiqah.emanbasahel.popularmovies_1.views;
 
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -17,6 +19,8 @@ import java.util.List;
 
 import sa.thiqah.emanbasahel.popularmovies_1.R;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
+import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesContract;
+import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesDatabase;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.MovieAdapter;
 
 
@@ -30,6 +34,7 @@ public class MovieListFragment extends Fragment {
     private MovieAdapter movieAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private int savedPosition;
+    private SQLiteDatabase mDb;
     //endregion
 
     @Override
@@ -38,6 +43,8 @@ public class MovieListFragment extends Fragment {
 
         RootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
         recyclerView = RootView.findViewById(R.id.recycler_view);
+        FavoritesDatabase dbHelper = new FavoritesDatabase(getActivity());
+        mDb = dbHelper.getWritableDatabase();
         //region getArguments
         if (getArguments() != null) {
             sortValue= getArguments().getString(getString(R.string.sortValue));
@@ -50,12 +57,26 @@ public class MovieListFragment extends Fragment {
             }
         }
 
+        getFavoritesMovies();
+
 //        if(savedInstanceState!=null)
 //        {
 //            recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_pos)));
 //        }
         //endregion
         return RootView;
+    }
+
+    private Cursor getFavoritesMovies() {
+        return mDb.query(
+                FavoritesContract.FavoriteMovies.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                FavoritesContract.FavoriteMovies.COLUMN_NAME_TIMESTAMP
+        );
     }
 
     //region create RecyclerView List

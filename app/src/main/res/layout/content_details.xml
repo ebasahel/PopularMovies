@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
     <LinearLayout
@@ -65,4 +65,20 @@
     android:layout_height="wrap_content"
     android:id="@+id/txt_plot"
     android:layout_below="@+id/linear_container"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title_Trailers"
+        android:layout_below="@id/txt_plot"
+        android:text="@string/movie_trailer"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorAccent"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/trailers_recyclerview"
+        android:layout_below="@id/title_Trailers"/>
+
 </RelativeLayout>

@@ -20,7 +20,7 @@ public class SortDialog {
         void onSortTypeSelected(String sortType);
     }
 
-    private RadioButton radioTop, radioPopular;
+    private RadioButton radioTop, radioPopular,radioFavorites;
     private Button buttOk, buttCancel;
     private Context mContext;
     private onSortSelected sortSelected;
@@ -36,6 +36,7 @@ public class SortDialog {
         dialog.create();
         radioPopular = dialog.findViewById(R.id.sort_popular);
         radioTop = dialog.findViewById(R.id.sort_top);
+        radioFavorites=dialog.findViewById(R.id.sort_favorites);
         buttOk = dialog.findViewById(R.id.button_ok);
         buttCancel = dialog.findViewById(R.id.button_cancdl);
 
@@ -65,7 +66,8 @@ public class SortDialog {
 
                 } else if (radioTop.isChecked()) {
                     sortSelected.onSortTypeSelected(mContext.getString(R.string.toprated_movie));
-                }
+                }else if (radioFavorites.isChecked())
+                    sortSelected.onSortTypeSelected(mContext.getString(R.string.favorite_movie));
 
                 dialog.dismiss();
             }
