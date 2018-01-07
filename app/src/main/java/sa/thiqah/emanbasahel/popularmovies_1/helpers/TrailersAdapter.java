@@ -5,11 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.List;
-
 import sa.thiqah.emanbasahel.popularmovies_1.R;
-import sa.thiqah.emanbasahel.popularmovies_1.data.model.MovieTrailers;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.TrailersResult;
 
 /**
@@ -38,7 +35,6 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.Traile
 class TrailersHolder extends RecyclerView.ViewHolder
 {
     private TextView txtTrailersName;
-    String videoKey;
     TrailersHolder(View itemView) {
         super(itemView);
         txtTrailersName= itemView.findViewById(R.id.txt_trailer_name);
@@ -65,7 +61,7 @@ class TrailersHolder extends RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(TrailersHolder holder, int position) {
+    public void onBindViewHolder(final TrailersHolder holder, int position) {
         holder.bind(trailersResponse.get(position),listener);
 
     }

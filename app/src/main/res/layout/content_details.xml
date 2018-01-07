@@ -79,6 +79,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/trailers_recyclerview"
-        android:layout_below="@id/title_Trailers"/>
+        android:layout_below="@id/title_Trailers"
+        android:scrollbars="vertical"
+        android:nestedScrollingEnabled="false"/>
 
 </RelativeLayout>
