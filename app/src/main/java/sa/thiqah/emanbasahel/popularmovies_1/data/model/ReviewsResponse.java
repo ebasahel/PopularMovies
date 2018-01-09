@@ -3,6 +3,7 @@ package sa.thiqah.emanbasahel.popularmovies_1.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 /**
  * Created by emanbasahel on 02/01/2018 AD.
  */

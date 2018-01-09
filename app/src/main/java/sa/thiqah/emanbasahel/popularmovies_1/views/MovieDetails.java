@@ -23,7 +23,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -116,7 +115,7 @@ public class MovieDetails extends AppCompatActivity {
         getVideos();
     }
 
-    //region add movies to favorite
+    //region add movies to favorite method
     private void addToFavorite()
     {
         ContentValues cv = new ContentValues();
@@ -126,11 +125,13 @@ public class MovieDetails extends AppCompatActivity {
     }
     //endregion
 
+    //region open trailers in youtube app
     private void openTrailer(String videoKey)
     {
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoKey));
         startActivity(appIntent);
     }
+    //endregion
 
     //region call getVideos
     private void getVideos()
@@ -171,6 +172,7 @@ public class MovieDetails extends AppCompatActivity {
 
     }
     //endregion
+
     //region call getMovie Details API
     public void getMovieDetails() {
 

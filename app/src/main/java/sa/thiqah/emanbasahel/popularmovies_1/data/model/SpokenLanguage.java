@@ -7,7 +7,8 @@ package sa.thiqah.emanbasahel.popularmovies_1.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SpokenLanguage {
+
+public class SpokenLanguage  {
 
     @SerializedName("iso_639_1")
     @Expose

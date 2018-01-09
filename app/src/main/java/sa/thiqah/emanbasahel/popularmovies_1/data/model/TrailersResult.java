@@ -3,11 +3,12 @@ package sa.thiqah.emanbasahel.popularmovies_1.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 /**
  * Created by emanbasahel on 03/01/2018 AD.
  */
 
-public class TrailersResult {
+public class TrailersResult  {
     @SerializedName("id")
     @Expose
     private String id;
