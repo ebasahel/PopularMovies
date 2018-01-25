@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class FavoritesDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME="favoritemovies.db";
-    private static final int DATABASE_VERSION=1;
+    private static final int DATABASE_VERSION=2;
 
     public FavoritesDatabase (Context context)
     {
@@ -24,6 +24,7 @@ public class FavoritesDatabase extends SQLiteOpenHelper {
                 FavoritesContract.FavoriteMovies._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 FavoritesContract.FavoriteMovies.COLUMN_NAME_ID+ " INTEGER NOT NULL,"+
                 FavoritesContract.FavoriteMovies.COLUMN_NAME_TITLE+ " TEXT NOT NULL,"+
+                FavoritesContract.FavoriteMovies.COLUMN_NAME_IMAGE_PATH+ " TEXT NOT NULL,"+
                 FavoritesContract.FavoriteMovies.COLUMN_NAME_TIMESTAMP+ " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ");";
 

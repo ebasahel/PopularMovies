@@ -42,9 +42,9 @@ public class MovieDetails extends AppCompatActivity {
     //region variables
     private int movieId;
     private ImageView imgMovie;
+    String imgURL;
     private TextView txtTitle,txtDate,txtRating,txtplot;
     private FloatingActionButton btnFav;
-    private String movieKey;
     List<TrailersResult> trailersResultList;
     private RecyclerView trailersRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -52,7 +52,6 @@ public class MovieDetails extends AppCompatActivity {
     private Toolbar toolbar;
     private String movieTitle;
     private SQLiteDatabase mDb;
-//    private String YOUTUBE_BASE_URL="https://www.youtube.com/watch?v=";
     //endregion
 
     @Override
@@ -105,7 +104,10 @@ public class MovieDetails extends AppCompatActivity {
         btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addToFavorite();
+                if (addToFavorite()==-1) {
+                    Toast.makeText(MovieDetails.this,getString(R.string.favorite_msg_error),Toast.LENGTH_LONG).show();}
+                else {
+                    Toast.makeText(MovieDetails.this,String.format(getString(R.string.favorite_msg),movieTitle),Toast.LENGTH_LONG).show();}
             }
         });
         //endregion
@@ -115,13 +117,16 @@ public class MovieDetails extends AppCompatActivity {
         getVideos();
     }
 
-    //region add movies to favorite method
-    private void addToFavorite()
+    //region add movies to favorite database
+    private long addToFavorite()
     {
         ContentValues cv = new ContentValues();
         cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_TITLE,movieTitle);
         cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_ID,movieId);
-        mDb.insert(FavoritesContract.FavoriteMovies.TABLE_NAME,null,cv);
+        cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_IMAGE_PATH,imgURL);
+
+        long newRow = mDb.insert(FavoritesContract.FavoriteMovies.TABLE_NAME,null,cv);
+        return newRow;
     }
     //endregion
 
@@ -181,7 +186,7 @@ public class MovieDetails extends AppCompatActivity {
         call.enqueue(new Callback<MovieDetailsModel>() {
             @Override
             public void onResponse(@NonNull Call<MovieDetailsModel> call, @NonNull Response<MovieDetailsModel> response) {
-                String imgURL = "http://image.tmdb.org/t/p/w185//"+ response.body().getPosterPath();
+                imgURL = "http://image.tmdb.org/t/p/w185//"+ response.body().getPosterPath();
                 Picasso.with(MovieDetails.this).load(imgURL).into(imgMovie);
                 movieTitle=response.body().getTitle();
                 txtTitle.setText(String.format(getString(R.string.movie_title),movieTitle));
@@ -201,5 +206,10 @@ public class MovieDetails extends AppCompatActivity {
     }
     //endregion
 
+    @Override
+    protected void onDestroy() {
+        mDb.close();
+        super.onDestroy();
+    }
 
 }

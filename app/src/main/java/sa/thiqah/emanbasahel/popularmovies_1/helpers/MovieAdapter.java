@@ -2,6 +2,7 @@ package sa.thiqah.emanbasahel.popularmovies_1.helpers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,11 +37,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     //region variables
     private List<Result> movieList;
     private final OnItemClickListener listener;
+    private Cursor mCursor;
 
     //endregion
     public MovieAdapter ( List<Result> mList,OnItemClickListener mListener)
     {
         movieList=mList;
+        listener=mListener;
+    }
+
+    public MovieAdapter (Cursor cursor, OnItemClickListener mListener)
+    {
+        mCursor=cursor;
         listener=mListener;
     }
     //region ViewHolder Class

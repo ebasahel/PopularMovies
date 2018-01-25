@@ -118,6 +118,19 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     }
     //endregion
 
+    //region add fragment Favorite movies
+    public void addFragment(Fragment frag, String sortValue) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.sortValue), sortValue);
+        frag.setArguments(bundle);
+        fragmentTransaction.replace(R.id.container, frag);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+    //endregion
+
     //region sort type action listener
     @Override
     public void onSortTypeSelected(String sortType) {
@@ -126,8 +139,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         else if(sortType.equals(getString(R.string.popular_movie)))
             getPopularMovies();
         else if(sortType.equals(getString(R.string.favorite_movie)))
-            addFragment(favoriteMoviesFragment,movieList,getString(R.string.favorite_movie));
-//            //ToDo list of favorites movies
+            addFragment(favoriteMoviesFragment,getString(R.string.favorite_movie));
     }
     //endregion
 
