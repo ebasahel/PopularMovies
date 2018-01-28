@@ -120,13 +120,25 @@ public class MovieDetails extends AppCompatActivity {
     //region add movies to favorite database
     private long addToFavorite()
     {
-        ContentValues cv = new ContentValues();
-        cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_TITLE,movieTitle);
-        cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_ID,movieId);
-        cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_IMAGE_PATH,imgURL);
+        String projection[] = {FavoritesContract.FavoriteMovies.COLUMN_NAME_ID};
+        String selection = FavoritesContract.FavoriteMovies.COLUMN_NAME_ID + " = ? ";
+        String selectionArgs[] = {String.valueOf(movieId)};
 
-        long newRow = mDb.insert(FavoritesContract.FavoriteMovies.TABLE_NAME,null,cv);
-        return newRow;
+        if (mDb.query(FavoritesContract.FavoriteMovies.TABLE_NAME, projection, selection, selectionArgs,
+                null, null, null).getCount() == 0) {
+
+            ContentValues cv = new ContentValues();
+            cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_TITLE, movieTitle);
+            cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_ID, movieId);
+            cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_IMAGE_PATH, imgURL);
+
+            long newRow = mDb.insert(FavoritesContract.FavoriteMovies.TABLE_NAME, null, cv);
+            return newRow;
+        } else
+        {
+            return -1;
+        }
+
     }
     //endregion
 
