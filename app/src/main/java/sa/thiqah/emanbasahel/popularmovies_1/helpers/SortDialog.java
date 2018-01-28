@@ -63,7 +63,6 @@ public class SortDialog {
             public void onClick(View view) {
                 if (radioPopular.isChecked()) {
                     sortSelected.onSortTypeSelected(mContext.getString(R.string.popular_movie));
-
                 } else if (radioTop.isChecked()) {
                     sortSelected.onSortTypeSelected(mContext.getString(R.string.toprated_movie));
                 }else if (radioFavorites.isChecked())

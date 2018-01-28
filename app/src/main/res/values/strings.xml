@@ -30,4 +30,5 @@
     <string name="movie_trailer">Movie Trailer:</string>
     <string name="favorite_msg">Movie \" %1$s \" has been added to Favorite list</string>
     <string name="favorite_msg_error">Movie is already added to favorite lists</string>
+    <string name="noFvorite">There\'re no favorite movies</string>
 </resources>

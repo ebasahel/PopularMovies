@@ -58,10 +58,10 @@ public class MovieListFragment extends Fragment {
             if (sortValue.equals(getString(R.string.popular_movie))) {
                 movieList = getArguments().getParcelableArrayList(getString(R.string.popular_movie));
                 createRecyclerList(movieList);
-            } else if (sortValue.equals((R.string.toprated_movie))) {
+            } else if (sortValue.equals(getString(R.string.toprated_movie))) {
                 movieList = getArguments().getParcelableArrayList(getString(R.string.toprated_movie));
                 createRecyclerList(movieList);
-            } else if (sortValue.equals(R.string.favorite_movie)) {
+            } else if (sortValue.equals(getString(R.string.favorite_movie))) {
                 createFavoriteRecyclerList(getFavoritesMovies());
             }
         }
@@ -80,24 +80,13 @@ public class MovieListFragment extends Fragment {
         String sortOrder =
                 FavoritesContract.FavoriteMovies.COLUMN_NAME_TIMESTAMP + " DESC";
 
-        Cursor cursor = mDb.query(
-                FavoritesContract.FavoriteMovies.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                sortOrder,
-                FavoritesContract.FavoriteMovies.COLUMN_NAME_TIMESTAMP
-        );
+        Cursor cursor = mDb.query(FavoritesContract.FavoriteMovies.TABLE_NAME, null, null, null,
+                null, null, sortOrder);
 
+        if (!cursor.moveToFirst()) {
 
-        if (cursor.moveToFirst()) {
-            do {
-                Toast.makeText(getActivity(),
-                        cursor.getString(cursor.getColumnIndex(FavoritesContract.FavoriteMovies._ID)),
-                        Toast.LENGTH_SHORT)
-                        .show();
-            } while (cursor.moveToNext());
+            Toast.makeText(getActivity(),getString(R.string.noFvorite),Toast.LENGTH_SHORT).show();
+
         }
 
         return cursor;

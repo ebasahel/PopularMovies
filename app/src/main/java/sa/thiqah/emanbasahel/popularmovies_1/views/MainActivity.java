@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
     //endregion
 
     //region add fragment Favorite movies
-    public void addFragment(Fragment frag, String sortValue) {
+    public void addFavFragment(Fragment frag, String sortValue) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         else if(sortType.equals(getString(R.string.popular_movie)))
             getPopularMovies();
         else if(sortType.equals(getString(R.string.favorite_movie)))
-            addFragment(favoriteMoviesFragment,getString(R.string.favorite_movie));
+            addFavFragment(favoriteMoviesFragment,getString(R.string.favorite_movie));
     }
     //endregion
 
