@@ -1,7 +1,9 @@
 package sa.thiqah.emanbasahel.popularmovies_1.views;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -19,10 +21,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,7 +47,7 @@ public class MovieDetails extends AppCompatActivity {
     private int movieId;
     private ImageView imgMovie;
     String imgURL;
-    private TextView txtTitle,txtDate,txtRating,txtplot;
+    private TextView txtTitle, txtDate, txtRating, txtplot;
     private FloatingActionButton btnFav;
     List<TrailersResult> trailersResultList;
     private RecyclerView trailersRecyclerView;
@@ -51,7 +55,6 @@ public class MovieDetails extends AppCompatActivity {
     private static final String API_KEY = BuildConfig.api_key;
     private Toolbar toolbar;
     private String movieTitle;
-    private SQLiteDatabase mDb;
     //endregion
 
     @Override
@@ -62,22 +65,20 @@ public class MovieDetails extends AppCompatActivity {
 
         //region init
         Intent intent = getIntent();
-        movieId= intent.getIntExtra(getString(R.string.movieId),0);
-        FavoritesDatabase dbHelper = new FavoritesDatabase(this);
-        mDb = dbHelper.getWritableDatabase();
-        trailersResultList= new ArrayList<>();
+        movieId = intent.getIntExtra(getString(R.string.movieId), 0);
+        trailersResultList = new ArrayList<>();
         imgMovie = findViewById(R.id.img_movie);
         txtTitle = findViewById(R.id.txt_movie_title);
-        txtDate =findViewById(R.id.txt_date);
+        txtDate = findViewById(R.id.txt_date);
         txtRating = findViewById(R.id.txt_rating);
-        txtplot=findViewById(R.id.txt_plot);
-        trailersRecyclerView=findViewById(R.id.trailers_recyclerview);
-        btnFav=findViewById(R.id.btn_fav);
+        txtplot = findViewById(R.id.txt_plot);
+        trailersRecyclerView = findViewById(R.id.trailers_recyclerview);
+        btnFav = findViewById(R.id.btn_fav);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               NavUtils.navigateUpTo(MovieDetails.this,new Intent(MovieDetails.this,MainActivity.class));
+                NavUtils.navigateUpTo(MovieDetails.this, new Intent(MovieDetails.this, MainActivity.class));
             }
         });
 
@@ -90,7 +91,7 @@ public class MovieDetails extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle bundle = new Bundle();
-                bundle.putInt(getString(R.string.movieId),movieId);
+                bundle.putInt(getString(R.string.movieId), movieId);
                 reviewsFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.container, reviewsFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -104,10 +105,11 @@ public class MovieDetails extends AppCompatActivity {
         btnFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (addToFavorite()==-1) {
-                    Toast.makeText(MovieDetails.this,getString(R.string.favorite_msg_error),Toast.LENGTH_LONG).show();}
-                else {
-                    Toast.makeText(MovieDetails.this,String.format(getString(R.string.favorite_msg),movieTitle),Toast.LENGTH_LONG).show();}
+                if (addToFavorite() == -1) {
+                    Toast.makeText(MovieDetails.this, getString(R.string.favorite_msg_error), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MovieDetails.this, String.format(getString(R.string.favorite_msg), movieTitle), Toast.LENGTH_LONG).show();
+                }
             }
         });
         //endregion
@@ -118,22 +120,22 @@ public class MovieDetails extends AppCompatActivity {
     }
 
     //region add movies to favorite database
-    private long addToFavorite()
-    {
+    private long addToFavorite() {
         String projection[] = {FavoritesContract.FavoriteMovies.COLUMN_NAME_ID};
         String selection = FavoritesContract.FavoriteMovies.COLUMN_NAME_ID + " = ? ";
         String selectionArgs[] = {String.valueOf(movieId)};
 
-        if (mDb.query(FavoritesContract.FavoriteMovies.TABLE_NAME, projection, selection, selectionArgs,
-                null, null, null).getCount() == 0) {
+        if (getContentResolver().query(Uri.withAppendedPath(FavoritesContract.FavoriteMovies.CONTENT_URI,String.valueOf(movieId)), projection, selection, selectionArgs,null).getCount()==0)
+        {
 
             ContentValues cv = new ContentValues();
             cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_TITLE, movieTitle);
             cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_ID, movieId);
             cv.put(FavoritesContract.FavoriteMovies.COLUMN_NAME_IMAGE_PATH, imgURL);
 
-            long newRow = mDb.insert(FavoritesContract.FavoriteMovies.TABLE_NAME, null, cv);
-            return newRow;
+            Uri uri = getContentResolver().insert(FavoritesContract.FavoriteMovies.CONTENT_URI,cv);
+
+            return ContentUris.parseId(uri);
         } else
         {
             return -1;
@@ -143,23 +145,21 @@ public class MovieDetails extends AppCompatActivity {
     //endregion
 
     //region open trailers in youtube app
-    private void openTrailer(String videoKey)
-    {
+    private void openTrailer(String videoKey) {
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoKey));
         startActivity(appIntent);
     }
     //endregion
 
     //region call getVideos
-    private void getVideos()
-    {
+    private void getVideos() {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<MovieTrailers> call = apiService.getMovieTrailers(movieId,API_KEY);
+        Call<MovieTrailers> call = apiService.getMovieTrailers(movieId, API_KEY);
         call.enqueue(new Callback<MovieTrailers>() {
             @Override
             public void onResponse(@NonNull Call<MovieTrailers> call, @NonNull Response<MovieTrailers> response) {
 
-                trailersResultList=response.body().getResults();
+                trailersResultList = response.body().getResults();
                 createRecyclerView(trailersResultList);
             }
 
@@ -173,12 +173,11 @@ public class MovieDetails extends AppCompatActivity {
     //endregion
 
     //region init RecyclerView
-    private void createRecyclerView(List<TrailersResult> trailersList)
-    {
+    private void createRecyclerView(List<TrailersResult> trailersList) {
         mLayoutManager = new LinearLayoutManager(this);
         trailersRecyclerView.setLayoutManager(mLayoutManager);
         trailersRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        TrailersAdapter trailersAdapter= new TrailersAdapter(trailersList, new TrailersAdapter.OnItemClickListener() {
+        TrailersAdapter trailersAdapter = new TrailersAdapter(trailersList, new TrailersAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(TrailersResult itemResult) {
                 openTrailer(itemResult.getKey());
@@ -194,17 +193,17 @@ public class MovieDetails extends AppCompatActivity {
     public void getMovieDetails() {
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<MovieDetailsModel> call = apiService.getMovieDetails(movieId,API_KEY);
+        Call<MovieDetailsModel> call = apiService.getMovieDetails(movieId, API_KEY);
         call.enqueue(new Callback<MovieDetailsModel>() {
             @Override
             public void onResponse(@NonNull Call<MovieDetailsModel> call, @NonNull Response<MovieDetailsModel> response) {
-                imgURL = "http://image.tmdb.org/t/p/w185//"+ response.body().getPosterPath();
+                imgURL = "http://image.tmdb.org/t/p/w185//" + response.body().getPosterPath();
                 Picasso.with(MovieDetails.this).load(imgURL).into(imgMovie);
-                movieTitle=response.body().getTitle();
-                txtTitle.setText(String.format(getString(R.string.movie_title),movieTitle));
-                txtDate.setText(String.format(getString(R.string.release_date),response.body().getReleaseDate()));
-                txtRating.setText(String.format(getString(R.string.rating),response.body().getVoteAverage()));
-                txtplot.setText(String.format(getString(R.string.plot),response.body().getOverview()));
+                movieTitle = response.body().getTitle();
+                txtTitle.setText(String.format(getString(R.string.movie_title), movieTitle));
+                txtDate.setText(String.format(getString(R.string.release_date), response.body().getReleaseDate()));
+                txtRating.setText(String.format(getString(R.string.rating), response.body().getVoteAverage()));
+                txtplot.setText(String.format(getString(R.string.plot), response.body().getOverview()));
 
             }
 
@@ -218,10 +217,5 @@ public class MovieDetails extends AppCompatActivity {
     }
     //endregion
 
-    @Override
-    protected void onDestroy() {
-        mDb.close();
-        super.onDestroy();
-    }
 
 }

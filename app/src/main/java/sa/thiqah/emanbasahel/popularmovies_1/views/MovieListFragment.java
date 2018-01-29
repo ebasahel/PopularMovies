@@ -27,6 +27,8 @@ import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesDatabase;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.FavoriteMovieAdapter;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.MovieAdapter;
 
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 
 public class MovieListFragment extends Fragment {
 
@@ -38,8 +40,7 @@ public class MovieListFragment extends Fragment {
     private MovieAdapter movieAdapter;
     FavoriteMovieAdapter favoriteMovieAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private int savedPosition;
-    private SQLiteDatabase mDb;
+    private int firstVisiblePosition;
     //endregion
 
     @Override
@@ -50,7 +51,6 @@ public class MovieListFragment extends Fragment {
         RootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
         recyclerView = RootView.findViewById(R.id.recycler_view);
         FavoritesDatabase dbHelper = new FavoritesDatabase(getActivity());
-        mDb = dbHelper.getReadableDatabase();
         //endregion
         //region getArguments
         if (getArguments() != null) {
@@ -80,8 +80,8 @@ public class MovieListFragment extends Fragment {
         String sortOrder =
                 FavoritesContract.FavoriteMovies.COLUMN_NAME_TIMESTAMP + " DESC";
 
-        Cursor cursor = mDb.query(FavoritesContract.FavoriteMovies.TABLE_NAME, null, null, null,
-                null, null, sortOrder);
+        Cursor cursor = getActivity().getContentResolver().query(FavoritesContract.FavoriteMovies.CONTENT_URI, null, null, null,
+                 sortOrder);
 
         if (!cursor.moveToFirst()) {
 
@@ -97,6 +97,8 @@ public class MovieListFragment extends Fragment {
     private void createRecyclerList(List<Result> mList) {
         //region init RecyclerView
         mLayoutManager = new GridLayoutManager(getActivity(), 2);
+//        firstVisiblePosition = mLayoutManager.findFirstVisibleItemPosition();
+
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         //endregion
@@ -133,12 +135,13 @@ public class MovieListFragment extends Fragment {
 
 
     //ToDo retain state
-//    @Override
-//    public void onSaveInstanceState(@Nullable Bundle bundle)
-//    {
-//        super.onSaveInstanceState(bundle);
-//        bundle.putParcelable(getString(R.string.recyclerview_pos),recyclerView.getLayoutManager().onSaveInstanceState());
-//    }
+    @Override
+    public void onSaveInstanceState(@Nullable Bundle bundle)
+    {
+        super.onSaveInstanceState(bundle);
+        recyclerView.getLayoutManager().onScrollStateChanged(SCROLL_STATE_IDLE);
+        bundle.putParcelable(getString(R.string.recyclerview_pos),recyclerView.getLayoutManager().onSaveInstanceState());
+    }
 //
 //    @Override
 //    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -148,10 +151,5 @@ public class MovieListFragment extends Fragment {
 //
 //    }
 
-    @Override
-    public void onDestroy() {
-        mDb.close();
-        super.onDestroy();
-    }
 
 }

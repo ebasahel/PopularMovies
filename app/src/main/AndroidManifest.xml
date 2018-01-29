@@ -13,6 +13,13 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:authorities="sa.thiqah.emanbasahel.popularmovies_1.data.sqlite"
+            android:name="sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoriteProvider"
+            android:exported="false"
+            />
+
         <activity android:name=".views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
