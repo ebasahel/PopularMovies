@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements SortDialog.onSort
         });
         //endregion
 
-        getPopularMovies();
+        if (savedInstanceState==null)
+            getPopularMovies();
     }
 
 
