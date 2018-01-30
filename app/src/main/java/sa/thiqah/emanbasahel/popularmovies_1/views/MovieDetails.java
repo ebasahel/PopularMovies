@@ -107,6 +107,7 @@ public class MovieDetails extends AppCompatActivity {
             public void onClick(View view) {
                 if (addToFavorite() == -1) {
                     Toast.makeText(MovieDetails.this, getString(R.string.favorite_msg_error), Toast.LENGTH_LONG).show();
+                    removeFromFavorite();
                 } else {
                     Toast.makeText(MovieDetails.this, String.format(getString(R.string.favorite_msg), movieTitle), Toast.LENGTH_LONG).show();
                 }
@@ -118,6 +119,15 @@ public class MovieDetails extends AppCompatActivity {
         getMovieDetails();
         getVideos();
     }
+
+    //region remove movie from favorite
+    private void removeFromFavorite()
+    {
+        String selection =  FavoritesContract.FavoriteMovies.COLUMN_NAME_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(movieId)};
+        getContentResolver().delete(Uri.withAppendedPath(FavoritesContract.FavoriteMovies.CONTENT_URI,String.valueOf(movieId)),selection,selectionArgs);
+    }
+    //endregion
 
     //region add movies to favorite database
     private long addToFavorite() {

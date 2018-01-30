@@ -92,7 +92,17 @@ public class FavoriteProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         SQLiteDatabase database = favoritesDatabase.getWritableDatabase();
         int deletedRows = 0;
-        deletedRows = database.delete(FavoritesContract.FavoriteMovies.TABLE_NAME,selection,selectionArgs);
+        int match = uriMatcher.match(uri);
+
+        switch (match){
+            case FAVORITE_MOVIES:
+                deletedRows = database.delete(FavoritesContract.FavoriteMovies.TABLE_NAME,selection,selectionArgs);
+                break;
+
+            case FAVORITE_MOVIE_ID:
+                deletedRows = database.delete(FavoritesContract.FavoriteMovies.TABLE_NAME,selection,selectionArgs);
+                break;
+        }
         return deletedRows;
 
     }

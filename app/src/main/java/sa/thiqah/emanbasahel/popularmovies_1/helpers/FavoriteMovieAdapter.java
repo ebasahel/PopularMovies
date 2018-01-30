@@ -25,7 +25,6 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
     public interface OnItemClickListener {
 
         void onItemClick(Cursor itemResult);
-
     }
 
     //region variables

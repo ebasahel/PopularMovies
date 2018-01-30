@@ -3,7 +3,6 @@ package sa.thiqah.emanbasahel.popularmovies_1.views;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -16,31 +15,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import java.util.List;
-
 import sa.thiqah.emanbasahel.popularmovies_1.R;
-import sa.thiqah.emanbasahel.popularmovies_1.data.model.FavoriteMovieModel;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
 import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesContract;
 import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesDatabase;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.FavoriteMovieAdapter;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.MovieAdapter;
+import sa.thiqah.emanbasahel.popularmovies_1.helpers.StatefulRecyclerView;
 
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 
 public class MovieListFragment extends Fragment {
 
     //region variables
     private View RootView;
-    private RecyclerView recyclerView;
+    private StatefulRecyclerView recyclerView;
     private List<Result> movieList;
     private String sortValue = "";
     private MovieAdapter movieAdapter;
-    FavoriteMovieAdapter favoriteMovieAdapter;
+    private FavoriteMovieAdapter favoriteMovieAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private int firstVisiblePosition;
     //endregion
 
     @Override
@@ -50,7 +45,6 @@ public class MovieListFragment extends Fragment {
         //region init
         RootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
         recyclerView = RootView.findViewById(R.id.recycler_view);
-        FavoritesDatabase dbHelper = new FavoritesDatabase(getActivity());
         //endregion
         //region getArguments
         if (getArguments() != null) {
@@ -66,11 +60,6 @@ public class MovieListFragment extends Fragment {
             }
         }
         //endregion
-
-//        if(savedInstanceState!=null)
-//        {
-//            recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_pos)));
-//        }
 
         return RootView;
     }
@@ -101,6 +90,7 @@ public class MovieListFragment extends Fragment {
 
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         //endregion
         movieAdapter = new MovieAdapter(mList, new MovieAdapter.OnItemClickListener() {
             @Override
@@ -133,23 +123,28 @@ public class MovieListFragment extends Fragment {
     }
     //endregion
 
-
-    //ToDo retain state
+    //region refresh view after removing movie from favorite list
     @Override
-    public void onSaveInstanceState(@Nullable Bundle bundle)
+    public void onResume()
     {
-        super.onSaveInstanceState(bundle);
-        recyclerView.getLayoutManager().onScrollStateChanged(SCROLL_STATE_IDLE);
-        bundle.putParcelable(getString(R.string.recyclerview_pos),recyclerView.getLayoutManager().onSaveInstanceState());
+        super.onResume();
+        if (sortValue.equals(getString(R.string.favorite_movie)))
+            createFavoriteRecyclerList(getFavoritesMovies());
     }
-//
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        if(savedInstanceState!=null)
-//            recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable(getString(R.string.recyclerview_pos)));
-//
-//    }
+    //endregion
 
+    //region retain state (needs work)
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null)
+        {
+            if (sortValue.equals(getString(R.string.favorite_movie)))
+                recyclerView.setAdapter(favoriteMovieAdapter);
+            else
+                recyclerView.setAdapter(movieAdapter);
+        }
+    }
+    //endregion
 
 }

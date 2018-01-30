@@ -8,6 +8,7 @@ public class FavoriteMovieModel {
 
     public String title;
     public String imgPath;
+    public int movieId;
 
     public void setTitle (String _title)
     {
@@ -27,5 +28,15 @@ public class FavoriteMovieModel {
     public String getImgPath ()
     {
         return imgPath;
+    }
+
+    public void setMovieId(int _movieID)
+    {
+        movieId=_movieID;
+    }
+
+    public int getMovieId()
+    {
+        return movieId;
     }
 }
