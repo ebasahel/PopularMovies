@@ -136,18 +136,4 @@ public class MovieListFragment extends Fragment {
     }
     //endregion
 
-    //region retain state (needs work)
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        if(savedInstanceState!=null)
-//        {
-//            if (sortValue.equals(getString(R.string.favorite_movie)))
-//                recyclerView.setAdapter(favoriteMovieAdapter);
-//            else
-//                recyclerView.setAdapter(movieAdapter);
-//        }
-//    }
-    //endregion
-
 }
