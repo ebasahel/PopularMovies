@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import java.util.List;
+
 import sa.thiqah.emanbasahel.popularmovies_1.R;
 import sa.thiqah.emanbasahel.popularmovies_1.data.model.Result;
 import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesContract;
@@ -23,7 +25,6 @@ import sa.thiqah.emanbasahel.popularmovies_1.data.sqlite.FavoritesDatabase;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.FavoriteMovieAdapter;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.MovieAdapter;
 import sa.thiqah.emanbasahel.popularmovies_1.helpers.StatefulRecyclerView;
-
 
 
 public class MovieListFragment extends Fragment {
@@ -36,16 +37,18 @@ public class MovieListFragment extends Fragment {
     private MovieAdapter movieAdapter;
     private FavoriteMovieAdapter favoriteMovieAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    Bundle savedInstanceState;
     //endregion
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle _savedInstanceState) {
 
         //region init
         RootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
         recyclerView = RootView.findViewById(R.id.recycler_view);
         //endregion
+
         //region getArguments
         if (getArguments() != null) {
             sortValue = getArguments().getString(getString(R.string.sortValue));
@@ -61,6 +64,7 @@ public class MovieListFragment extends Fragment {
         }
         //endregion
 
+
         return RootView;
     }
 
@@ -70,11 +74,11 @@ public class MovieListFragment extends Fragment {
                 FavoritesContract.FavoriteMovies.COLUMN_NAME_TIMESTAMP + " DESC";
 
         Cursor cursor = getActivity().getContentResolver().query(FavoritesContract.FavoriteMovies.CONTENT_URI, null, null, null,
-                 sortOrder);
+                sortOrder);
 
         if (!cursor.moveToFirst()) {
 
-            Toast.makeText(getActivity(),getString(R.string.noFvorite),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.noFvorite), Toast.LENGTH_SHORT).show();
 
         }
 
@@ -125,8 +129,7 @@ public class MovieListFragment extends Fragment {
 
     //region refresh view after removing movie from favorite list
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         if (sortValue.equals(getString(R.string.favorite_movie)))
             createFavoriteRecyclerList(getFavoritesMovies());
@@ -134,17 +137,17 @@ public class MovieListFragment extends Fragment {
     //endregion
 
     //region retain state (needs work)
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState!=null)
-        {
-            if (sortValue.equals(getString(R.string.favorite_movie)))
-                recyclerView.setAdapter(favoriteMovieAdapter);
-            else
-                recyclerView.setAdapter(movieAdapter);
-        }
-    }
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        if(savedInstanceState!=null)
+//        {
+//            if (sortValue.equals(getString(R.string.favorite_movie)))
+//                recyclerView.setAdapter(favoriteMovieAdapter);
+//            else
+//                recyclerView.setAdapter(movieAdapter);
+//        }
+//    }
     //endregion
 
 }
