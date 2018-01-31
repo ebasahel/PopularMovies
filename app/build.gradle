@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.kotlin.android.extensions'
 
 androidExtensions {
@@ -38,14 +37,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-js:1.2.0"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
     mavenCentral()
 }
 
-apply plugin: 'kotlin-android-extensions'
