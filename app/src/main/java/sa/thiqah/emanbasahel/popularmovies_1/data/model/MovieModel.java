@@ -5,13 +5,11 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
-import kotlinx.android.parcel.Parcelize;
 
 /**
  * Created by emanbasahel on 07/12/2017 AD.
  */
 
-@Parcelize
 public class MovieModel implements Parcelable {
     @SerializedName("page")
     @Expose

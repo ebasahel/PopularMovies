@@ -6,13 +6,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-import kotlinx.android.parcel.Parcelize;
 
 /**
  * Created by emanbasahel on 07/12/2017 AD.
  */
 
-@Parcelize
 public class Result implements Parcelable {
     @SerializedName("vote_count")
     @Expose
