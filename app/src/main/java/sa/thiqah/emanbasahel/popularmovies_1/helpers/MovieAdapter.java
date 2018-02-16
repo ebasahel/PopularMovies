@@ -37,18 +37,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     //region variables
     private List<Result> movieList;
     private final OnItemClickListener listener;
-    private Cursor mCursor;
 
     //endregion
     public MovieAdapter ( List<Result> mList,OnItemClickListener mListener)
     {
         movieList=mList;
-        listener=mListener;
-    }
-
-    public MovieAdapter (Cursor cursor, OnItemClickListener mListener)
-    {
-        mCursor=cursor;
         listener=mListener;
     }
     //region ViewHolder Class
